@@ -1,0 +1,46 @@
+# System / IDE Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Backend (Maven) Build Files
+scholarly-backend/target/
+scholarly-backend/.mvn/
+scholarly-backend/mvnw
+scholarly-backend/mvnw.cmd
+scholarly-backend/.metadata/
+scholarly-backend/.classpath
+scholarly-backend/.project
+scholarly-backend/.settings/
+scholarly-backend/*.iml
+
+# Frontend (Node / React) Build Files
+scholarly-frontend/node_modules/
+scholarly-frontend/dist/
+scholarly-frontend/build/
+scholarly-frontend/.svelte-kit/
+scholarly-frontend/.next/
+scholarly-frontend/out/
+scholarly-frontend/npm-debug.log*
+scholarly-frontend/yarn-debug.log*
+scholarly-frontend/yarn-error.log*
+scholarly-frontend/pnpm-debug.log*
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+
+# Local DB / Data volumes
+postgres-data/
+data/

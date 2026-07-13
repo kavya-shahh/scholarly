@@ -4,34 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './features/auth/Login';
 import Register from './features/auth/Register';
-
-// Basic Dashboard Placeholders for authentication testing
-const StudentDashboard = () => {
-  const { user, logout } = useAuth();
-  return (
-    <div style={dashboardStyles.container}>
-      <div style={dashboardStyles.card}>
-        <h1 style={dashboardStyles.roleBadge}>Student Portal</h1>
-        <h2 style={dashboardStyles.greeting}>Welcome, {user?.firstName} {user?.lastName}!</h2>
-        <div style={dashboardStyles.infoGrid}>
-          <div style={dashboardStyles.infoItem}>
-            <strong>Email:</strong> {user?.email}
-          </div>
-          <div style={dashboardStyles.infoItem}>
-            <strong>Enrollment No:</strong> {user?.enrollmentNumber}
-          </div>
-          <div style={dashboardStyles.infoItem}>
-            <strong>Department:</strong> {user?.department}
-          </div>
-          <div style={dashboardStyles.infoItem}>
-            <strong>Current GPA:</strong> {user?.gpa} / 10.00
-          </div>
-        </div>
-        <button onClick={logout} style={dashboardStyles.logoutBtn}>Sign Out</button>
-      </div>
-    </div>
-  );
-};
+import StudentDashboard from './features/dashboard/StudentDashboard';
 
 const FacultyDashboard = () => {
   const { user, logout } = useAuth();

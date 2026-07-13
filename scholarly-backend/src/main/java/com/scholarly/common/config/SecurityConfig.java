@@ -39,6 +39,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/v1/health").permitAll()
                 .requestMatchers("/v1/auth/register", "/v1/auth/login", "/v1/auth/logout").permitAll()
+                .requestMatchers("/uploads/**").permitAll()
+                .requestMatchers(org.springframework.http.HttpMethod.POST, "/v1/scholarships").hasRole("ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/v1/scholarships").hasAnyRole("STUDENT", "FACULTY", "ADMIN")
+                .requestMatchers("/v1/applications/**").hasRole("STUDENT")
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session

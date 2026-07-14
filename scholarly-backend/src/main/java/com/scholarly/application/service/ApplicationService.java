@@ -33,6 +33,9 @@ public class ApplicationService {
     @Autowired
     private FileStorageService fileStorageService;
 
+    @Autowired
+    private TranscriptParserService transcriptParserService;
+
     @Transactional
     public Application apply(String studentEmail, UUID scholarshipId, BigDecimal gpaEntered, MultipartFile file) {
         // 1. Retrieve the student profile
@@ -66,14 +69,35 @@ public class ApplicationService {
         // 6. Write binary to disk
         String fileUrl = fileStorageService.storeFile(file);
 
-        // 7. Instantiate and save application record
+        // 7. Parse transcript using PDFBox OCR
+        BigDecimal gpaExtracted = transcriptParserService.extractGpa(fileUrl);
+        
+        ApplicationStatus status = ApplicationStatus.SUBMITTED;
+        String systemComments = null;
+
+        if (gpaExtracted == null) {
+            // Parsing failure (scanned PDF or no matches)
+            status = ApplicationStatus.PENDING_VERIFICATION;
+            systemComments = "System Flag: OCR could not parse GPA. Scanned document or unrecognized format.";
+        } else {
+            // Compare extracted GPA with self-declared GPA (margin tolerance: 0.02)
+            BigDecimal difference = gpaExtracted.subtract(gpaEntered).abs();
+            if (difference.compareTo(new BigDecimal("0.02")) > 0) {
+                status = ApplicationStatus.PENDING_VERIFICATION;
+                systemComments = String.format("System Flag: Mismatch detected. Form submitted CGPA: %s, but OCR extracted CGPA from transcript: %s.", gpaEntered, gpaExtracted);
+            }
+        }
+
+        // 8. Instantiate and save application record
         Application application = new Application(
                 student,
                 scholarship,
-                ApplicationStatus.SUBMITTED,
+                status,
                 gpaEntered,
                 fileUrl
         );
+        application.setGpaExtracted(gpaExtracted);
+        application.setFacultyComments(systemComments);
 
         return applicationRepository.save(application);
     }

@@ -58,14 +58,21 @@ const StudentDashboard = () => {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
-            if (!allowedTypes.includes(file.type)) {
-                setModalError('Only PDF, JPEG, and PNG files are allowed.');
+            // Strictly enforce PDF file format
+            if (file.type !== 'application/pdf') {
+                setModalError('Only PDF files are allowed.');
                 setTranscriptFile(null);
-            } else {
-                setModalError('');
-                setTranscriptFile(file);
+                return;
             }
+            // Enforce max 5MB file size constraint
+            const maxSizeBytes = 5 * 1024 * 1024;
+            if (file.size > maxSizeBytes) {
+                setModalError('File size exceeds the 5MB limit.');
+                setTranscriptFile(null);
+                return;
+            }
+            setModalError('');
+            setTranscriptFile(file);
         }
     };
 
@@ -278,12 +285,12 @@ const StudentDashboard = () => {
                             </div>
 
                             <div className={styles.modalFormGroup}>
-                                <label className={styles.modalLabel}>Official Transcript (PDF/JPEG/PNG)</label>
+                                <label className={styles.modalLabel}>Official Grade Sheet (PDF Only)</label>
                                 <input
                                     type="file"
                                     className={styles.modalFile}
                                     onChange={handleFileChange}
-                                    accept=".pdf,.png,.jpg,.jpeg"
+                                    accept=".pdf"
                                     required
                                 />
                             </div>

@@ -42,11 +42,18 @@ public class SecurityConfig {
                 .requestMatchers("/uploads/**").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.POST, "/v1/scholarships").hasRole("ADMIN")
                 .requestMatchers(org.springframework.http.HttpMethod.GET, "/v1/scholarships").hasAnyRole("STUDENT", "FACULTY", "ADMIN")
-                .requestMatchers("/v1/applications/**").hasRole("STUDENT")
+                .requestMatchers(org.springframework.http.HttpMethod.POST, "/v1/applications").hasRole("STUDENT")
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/v1/applications/me").hasRole("STUDENT")
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/v1/applications").hasAnyRole("FACULTY", "ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.PUT, "/v1/applications/*/verify").hasAnyRole("FACULTY", "ADMIN")
+                .requestMatchers("/v1/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .headers(headers -> headers
+                .frameOptions(frameOptions -> frameOptions.sameOrigin())
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

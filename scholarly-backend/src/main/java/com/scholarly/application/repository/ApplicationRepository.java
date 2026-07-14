@@ -17,4 +17,15 @@ public interface ApplicationRepository extends JpaRepository<Application, UUID> 
     List<Application> findByStudentEmailOrderByAppliedAtDesc(String email);
 
     boolean existsByStudentIdAndScholarshipId(UUID studentId, UUID scholarshipId);
+
+    boolean existsByStudentId(UUID studentId);
+
+    @EntityGraph(attributePaths = {"scholarship", "student", "student.studentProfile"})
+    List<Application> findAllByOrderByAppliedAtDesc();
+
+    @EntityGraph(attributePaths = {"scholarship", "student", "student.studentProfile"})
+    List<Application> findByStatusOrderByAppliedAtDesc(com.scholarly.application.model.ApplicationStatus status);
+
+    @org.springframework.data.jpa.repository.Query("SELECT COALESCE(SUM(s.amount), 0) FROM Application a JOIN a.scholarship s WHERE a.status = com.scholarly.application.model.ApplicationStatus.APPROVED")
+    java.math.BigDecimal sumAllocatedFunds();
 }

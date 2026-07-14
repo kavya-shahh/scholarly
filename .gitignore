@@ -44,3 +44,4 @@ scholarly-frontend/pnpm-debug.log*
 # Local DB / Data volumes
 postgres-data/
 data/
+uploads/

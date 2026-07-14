@@ -5,48 +5,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Login from './features/auth/Login';
 import Register from './features/auth/Register';
 import StudentDashboard from './features/dashboard/StudentDashboard';
-
-const FacultyDashboard = () => {
-  const { user, logout } = useAuth();
-  return (
-    <div style={dashboardStyles.container}>
-      <div style={dashboardStyles.card}>
-        <h1 style={{...dashboardStyles.roleBadge, color: '#38bdf8', borderColor: '#38bdf8'}}>Faculty Portal</h1>
-        <h2 style={dashboardStyles.greeting}>Welcome, Prof. {user?.firstName} {user?.lastName}!</h2>
-        <div style={dashboardStyles.infoGrid}>
-          <div style={dashboardStyles.infoItem}>
-            <strong>Email:</strong> {user?.email}
-          </div>
-          <div style={dashboardStyles.infoItem}>
-            <strong>Department Authority:</strong> Verification Panel
-          </div>
-        </div>
-        <button onClick={logout} style={dashboardStyles.logoutBtn}>Sign Out</button>
-      </div>
-    </div>
-  );
-};
-
-const AdminDashboard = () => {
-  const { user, logout } = useAuth();
-  return (
-    <div style={dashboardStyles.container}>
-      <div style={dashboardStyles.card}>
-        <h1 style={{...dashboardStyles.roleBadge, color: '#a855f7', borderColor: '#a855f7'}}>Admin Portal</h1>
-        <h2 style={dashboardStyles.greeting}>Welcome Director, {user?.firstName} {user?.lastName}!</h2>
-        <div style={dashboardStyles.infoGrid}>
-          <div style={dashboardStyles.infoItem}>
-            <strong>Email:</strong> {user?.email}
-          </div>
-          <div style={dashboardStyles.infoItem}>
-            <strong>System Permissions:</strong> ROOT / ALL
-          </div>
-        </div>
-        <button onClick={logout} style={dashboardStyles.logoutBtn}>Sign Out</button>
-      </div>
-    </div>
-  );
-};
+import FacultyDashboard from './features/dashboard/FacultyDashboard';
+import AdminDashboard from './features/dashboard/AdminDashboard';
 
 const Unauthorized = () => {
   const { user } = useAuth();

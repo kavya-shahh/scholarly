@@ -50,9 +50,9 @@ public class ApplicationService {
         Scholarship scholarship = scholarshipRepository.findById(scholarshipId)
                 .orElseThrow(() -> new IllegalArgumentException("Scholarship program not found"));
 
-        // 3. Prevent duplicate submissions
-        if (applicationRepository.existsByStudentIdAndScholarshipId(student.getId(), scholarshipId)) {
-            throw new IllegalArgumentException("You have already submitted an application for this scholarship");
+        // 3. Prevent multiple submissions (limit to one scholarship application at a time)
+        if (applicationRepository.existsByStudentId(student.getId())) {
+            throw new IllegalArgumentException("A student is eligible for only one scholarship at a time.");
         }
 
         // 4. Validate GPA eligibility criteria
@@ -105,5 +105,33 @@ public class ApplicationService {
     @Transactional(readOnly = true)
     public List<Application> getStudentApplications(String studentEmail) {
         return applicationRepository.findByStudentEmailOrderByAppliedAtDesc(studentEmail);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Application> getAllApplications(ApplicationStatus status) {
+        if (status == null) {
+            return applicationRepository.findAllByOrderByAppliedAtDesc();
+        }
+        return applicationRepository.findByStatusOrderByAppliedAtDesc(status);
+    }
+
+    @Transactional
+    public Application verifyApplication(UUID id, String reviewerEmail, ApplicationStatus status, String comments) {
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Application not found"));
+
+        User reviewer = userRepository.findByEmail(reviewerEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Reviewer profile not found"));
+
+        if (status != ApplicationStatus.APPROVED && status != ApplicationStatus.REJECTED) {
+            throw new IllegalArgumentException("Invalid verification status transition: " + status);
+        }
+
+        application.setStatus(status);
+        application.setFacultyComments(comments);
+        application.setVerifiedAt(LocalDateTime.now());
+        application.setVerifiedBy(reviewer);
+
+        return applicationRepository.save(application);
     }
 }

@@ -47,6 +47,10 @@ const StudentDashboard = () => {
     };
 
     const handleApplyClick = (scholarship) => {
+        if (applications.length > 0) {
+            alert('A student is eligible for only one scholarship at a time.');
+            return;
+        }
         setSelectedScholarship(scholarship);
         setGpaEntered(user?.gpa || '');
         setTranscriptFile(null);
@@ -174,47 +178,68 @@ const StudentDashboard = () => {
                     <div>
                         {/* Tab 1: Browse Scholarships */}
                         {activeTab === 'scholarships' && (
-                            <div className={styles.grid}>
-                                {scholarships.length === 0 ? (
-                                    <div className={styles.emptyState}>No active scholarships available at the moment.</div>
-                                ) : (
-                                    scholarships.map(s => {
-                                        const ineligible = user?.gpa < s.minGpa;
-                                        const alreadyApplied = hasApplied(s.id);
-
-                                        return (
-                                            <div key={s.id} className={styles.card}>
-                                                <div className={styles.cardHeader}>
-                                                    <h3 className={styles.cardTitle}>{s.title}</h3>
-                                                    <span className={styles.amountBadge}>₹{s.amount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
-                                                </div>
-                                                <p className={styles.cardDesc}>{s.description}</p>
-                                                
-                                                <div className={styles.cardMeta}>
-                                                    <div>
-                                                        <strong>Deadline:</strong> {new Date(s.deadline).toLocaleDateString('en-GB')}
-                                                    </div>
-                                                    <div>
-                                                        <strong>Min GPA:</strong> {s.minGpa}
-                                                    </div>
-                                                </div>
-
-                                                <div className={styles.cardActions}>
-                                                    {alreadyApplied ? (
-                                                        <button className={styles.appliedBtn} disabled>Applied</button>
-                                                    ) : ineligible ? (
-                                                        <div className={styles.ineligibleContainer}>
-                                                            <span className={styles.ineligibleBadge}>GPA {s.minGpa} required</span>
-                                                            <button className={styles.applyBtn} disabled>Apply</button>
-                                                        </div>
-                                                    ) : (
-                                                        <button onClick={() => handleApplyClick(s)} className={styles.applyBtn}>Apply Now</button>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        );
-                                    })
+                            <div>
+                                {applications.length > 0 && (
+                                    <div style={{
+                                        background: 'rgba(234, 179, 8, 0.1)',
+                                        border: '1px solid rgba(234, 179, 8, 0.2)',
+                                        borderRadius: '6px',
+                                        padding: '12px 20px',
+                                        color: '#eab308',
+                                        fontSize: '14px',
+                                        fontWeight: '500',
+                                        marginBottom: '24px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '10px'
+                                    }}>
+                                        ⚠️ Note: You have already submitted an application. A student is eligible for only one scholarship at a time.
+                                    </div>
                                 )}
+                                <div className={styles.grid}>
+                                    {scholarships.length === 0 ? (
+                                        <div className={styles.emptyState}>No active scholarships available at the moment.</div>
+                                    ) : (
+                                        scholarships.map(s => {
+                                            const ineligible = user?.gpa < s.minGpa;
+                                            const alreadyApplied = hasApplied(s.id);
+
+                                            return (
+                                                <div key={s.id} className={styles.card}>
+                                                    <div className={styles.cardHeader}>
+                                                        <h3 className={styles.cardTitle}>{s.title}</h3>
+                                                        <span className={styles.amountBadge}>₹{s.amount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
+                                                    </div>
+                                                    <p className={styles.cardDesc}>{s.description}</p>
+                                                    
+                                                    <div className={styles.cardMeta}>
+                                                        <div>
+                                                            <strong>Deadline:</strong> {new Date(s.deadline).toLocaleDateString('en-GB')}
+                                                        </div>
+                                                        <div>
+                                                            <strong>Min GPA:</strong> {s.minGpa}
+                                                        </div>
+                                                    </div>
+
+                                                    <div className={styles.cardActions}>
+                                                        {alreadyApplied ? (
+                                                            <button className={styles.appliedBtn} disabled>Applied</button>
+                                                        ) : applications.length > 0 ? (
+                                                            <button className={styles.appliedBtn} style={{ borderColor: '#636370', color: '#636370' }} disabled>Applied to Another</button>
+                                                        ) : ineligible ? (
+                                                            <div className={styles.ineligibleContainer}>
+                                                                <span className={styles.ineligibleBadge}>GPA {s.minGpa} required</span>
+                                                                <button className={styles.applyBtn} disabled>Apply</button>
+                                                            </div>
+                                                        ) : (
+                                                            <button onClick={() => handleApplyClick(s)} className={styles.applyBtn}>Apply Now</button>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })
+                                    )}
+                                </div>
                             </div>
                         )}
 

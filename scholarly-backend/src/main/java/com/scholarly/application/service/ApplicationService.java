@@ -8,6 +8,8 @@ import com.scholarly.auth.repository.UserRepository;
 import com.scholarly.common.service.FileStorageService;
 import com.scholarly.scholarship.model.Scholarship;
 import com.scholarly.scholarship.repository.ScholarshipRepository;
+import com.scholarly.auth.model.Role;
+import com.scholarly.notification.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +37,9 @@ public class ApplicationService {
 
     @Autowired
     private TranscriptParserService transcriptParserService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Transactional
     public Application apply(String studentEmail, UUID scholarshipId, BigDecimal gpaEntered, MultipartFile file) {
@@ -99,7 +104,31 @@ public class ApplicationService {
         application.setGpaExtracted(gpaExtracted);
         application.setFacultyComments(systemComments);
 
-        return applicationRepository.save(application);
+        Application savedApplication = applicationRepository.save(application);
+
+        // 9. Send email notifications safely
+        try {
+            String studentName = student.getFirstName() + " " + student.getLastName();
+            emailService.sendApplicationSubmitted(student.getEmail(), studentName, scholarship.getTitle());
+
+            if (savedApplication.getStatus() == ApplicationStatus.PENDING_VERIFICATION) {
+                List<User> facultyUsers = userRepository.findByRole(Role.FACULTY);
+                String flagReason = systemComments != null ? systemComments : "Document review required.";
+                for (User faculty : facultyUsers) {
+                    emailService.sendVerificationRequired(
+                            faculty.getEmail(),
+                            studentName,
+                            scholarship.getTitle(),
+                            flagReason
+                    );
+                }
+            }
+        } catch (Exception e) {
+            org.slf4j.LoggerFactory.getLogger(ApplicationService.class)
+                    .error("Failed to send transactional email for application submission", e);
+        }
+
+        return savedApplication;
     }
 
     @Transactional(readOnly = true)
@@ -132,6 +161,34 @@ public class ApplicationService {
         application.setVerifiedAt(LocalDateTime.now());
         application.setVerifiedBy(reviewer);
 
-        return applicationRepository.save(application);
+        Application savedApplication = applicationRepository.save(application);
+
+        // Send email notifications safely
+        try {
+            User student = savedApplication.getStudent();
+            String studentName = student.getFirstName() + " " + student.getLastName();
+            String scholarshipTitle = savedApplication.getScholarship().getTitle();
+
+            if (savedApplication.getStatus() == ApplicationStatus.APPROVED) {
+                emailService.sendApplicationApproved(
+                        student.getEmail(),
+                        studentName,
+                        scholarshipTitle,
+                        savedApplication.getFacultyComments()
+                );
+            } else if (savedApplication.getStatus() == ApplicationStatus.REJECTED) {
+                emailService.sendApplicationRejected(
+                        student.getEmail(),
+                        studentName,
+                        scholarshipTitle,
+                        savedApplication.getFacultyComments()
+                );
+            }
+        } catch (Exception e) {
+            org.slf4j.LoggerFactory.getLogger(ApplicationService.class)
+                    .error("Failed to send transactional email for verification update", e);
+        }
+
+        return savedApplication;
     }
 }

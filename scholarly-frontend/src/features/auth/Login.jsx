@@ -19,7 +19,7 @@ const Login = () => {
 
         try {
             const user = await login(email, password);
-            // Route users based on their roles
+
             if (user.role === 'STUDENT') {
                 navigate('/student/dashboard');
             } else if (user.role === 'FACULTY') {

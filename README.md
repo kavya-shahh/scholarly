@@ -12,7 +12,7 @@ Here’s the list of all the **features** i inculcated in it:
 **Screenshots:**
 <img width="1920" height="1080" alt="Screenshot 2026-07-18 201230" src="https://github.com/user-attachments/assets/b7e11f8b-9b39-4ea3-9909-c42bb055b6ff" />  
 <img width="1920" height="1080" alt="Screenshot 2026-07-18 201330" src="https://github.com/user-attachments/assets/9f94e839-f826-4f4f-86dd-e0515c0a866e" />  
-<img width="1920" height="1080" alt="Screenshot 2026-07-18 201920" src="https://github.com/user-attachments/assets/756c5535-024e-4a36-ac00-1dac3c3d4df3" />  
+<img width="1915" height="1023" alt="Screenshot 2026-07-18 201920" src="https://github.com/user-attachments/assets/1e8bc302-d562-4464-a362-2b8b212b68a8" />
 <img width="1920" height="1080" alt="Screenshot 2026-07-18 202115" src="https://github.com/user-attachments/assets/40af2695-8386-413c-8d0f-1745aedf8fe5" />  
 <img width="1920" height="1080" alt="Screenshot 2026-07-18 202153" src="https://github.com/user-attachments/assets/23f3a2f5-52cb-426e-b5e6-7048f6e82950" />  
 <img width="1920" height="1080" alt="Screenshot 2026-07-18 202234" src="https://github.com/user-attachments/assets/d0927920-0706-4d7e-a6ca-d3897a172a20" />  
@@ -30,7 +30,7 @@ Prerequisites
 • **Node.js:** Version 18 or higher (includes npm).  
 • **Database:** PostgreSQL installed locally OR Docker (to run PostgreSQL inside a container).
 
-**Step 1: Database Setup**  
+### Step 1: Database Setup
 You can set up the database using either Option A (Docker) **OR** Option B (Native PostgreSQL):  
 **Option A: Using Docker Compose** 
 If you already have Docker installed, simply run the f command in the root project folder:  

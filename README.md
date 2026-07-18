@@ -51,7 +51,7 @@ If you are running PostgreSQL directly on your machine:
 2. Build and launch the application using the Maven wrapper:
    .\mvnw spring-boot:run
 3. The server will start on port 8080 (accessible at /api) and automatically initialize the database schema.
-    **Step 3: Run the Vite Frontend**
+   **Step 3: Run the Vite Frontend**
 1. Open a new terminal window and navigate to the frontend directory:
    cd scholarly-frontend
 2. Install project dependencies:

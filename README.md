@@ -45,13 +45,13 @@ If you are running PostgreSQL directly on your machine:
    • Username: postgres
    • Password: secret
    • Port: 5432 (If your local credentials differ, configure environment variables for DB_URL, DB_USER, and DB_PASSWORD before starting the application).
-**Step 2: Run the Spring Boot Backend**
+   **Step 2: Run the Spring Boot Backend**
 1. Open a terminal and navigate to the backend directory:
     cd scholarly-backend
 2. Build and launch the application using the Maven wrapper:
    .\mvnw spring-boot:run
 3. The server will start on port 8080 (accessible at /api) and automatically initialize the database schema.
-**Step 3: Run the Vite Frontend**
+    **Step 3: Run the Vite Frontend**
 1. Open a new terminal window and navigate to the frontend directory:
    cd scholarly-frontend
 2. Install project dependencies:

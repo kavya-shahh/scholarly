@@ -17,13 +17,13 @@ public class StudentProfile {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false, precision = 4, scale = 2)
+    @Column(precision = 4, scale = 2)
     private BigDecimal gpa;
 
-    @Column(nullable = false)
+    @Column
     private String department;
 
-    @Column(name = "enrollment_number", unique = true, nullable = false)
+    @Column(name = "enrollment_number", unique = true)
     private String enrollmentNumber;
 
     // Constructors

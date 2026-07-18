@@ -123,7 +123,6 @@ export default function FacultyDashboard() {
         <div className={styles.dashboardContainer}>
             <header className={styles.header}>
                 <div className={styles.headerBrand}>
-                    <span className={styles.logoBadge} style={{ backgroundColor: '#000000ec' }}>S</span>
                     <h1 className={styles.title} style={{ color: '#d33499ff' }}>scholarly <span className={styles.roleLabel} style={{ color: '#b9b910ff' }}>Faculty Audit</span></h1>
 
                 </div>

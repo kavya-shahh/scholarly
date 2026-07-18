@@ -23,6 +23,8 @@ import java.util.UUID;
 @Service
 public class ApplicationService {
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ApplicationService.class);
+
     @Autowired
     private ApplicationRepository applicationRepository;
 
@@ -111,22 +113,20 @@ public class ApplicationService {
             String studentName = student.getFirstName() + " " + student.getLastName();
             emailService.sendApplicationSubmitted(student.getEmail(), studentName, scholarship.getTitle());
 
-            if (savedApplication.getStatus() == ApplicationStatus.PENDING_VERIFICATION) {
-                List<User> facultyUsers = userRepository.findByRole(Role.FACULTY);
-                String flagReason = systemComments != null ? systemComments : "Document review required.";
-                for (User faculty : facultyUsers) {
-                    emailService.sendVerificationRequired(
-                            faculty.getEmail(),
-                            studentName,
-                            scholarship.getTitle(),
-                            flagReason
-                    );
-                }
+            if (savedApplication.getStatus() == ApplicationStatus.SUBMITTED) {
+                emailService.sendApplicationApproved(
+                        student.getEmail(),
+                        studentName,
+                        scholarship.getTitle(),
+                        "Auto-Approved: OCR gradesheet verification matched and eligible."
+                );
             }
         } catch (Exception e) {
-            org.slf4j.LoggerFactory.getLogger(ApplicationService.class)
-                    .error("Failed to send transactional email for application submission", e);
+            log.error("Failed to send transactional email for application submission", e);
         }
+
+        log.info("Application successfully submitted by student [email: {}] for scholarship [id: {}, title: {}]. Routed to status: {}", 
+                student.getEmail(), scholarship.getId(), scholarship.getTitle(), savedApplication.getStatus());
 
         return savedApplication;
     }
@@ -185,9 +185,11 @@ public class ApplicationService {
                 );
             }
         } catch (Exception e) {
-            org.slf4j.LoggerFactory.getLogger(ApplicationService.class)
-                    .error("Failed to send transactional email for verification update", e);
+            log.error("Failed to send transactional email for verification update", e);
         }
+
+        log.info("Application [id: {}] successfully audited by faculty reviewer [email: {}]. Target Status: {}", 
+                savedApplication.getId(), reviewer.getEmail(), savedApplication.getStatus());
 
         return savedApplication;
     }

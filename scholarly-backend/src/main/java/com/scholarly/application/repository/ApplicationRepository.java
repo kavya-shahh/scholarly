@@ -28,4 +28,6 @@ public interface ApplicationRepository extends JpaRepository<Application, UUID> 
 
     @org.springframework.data.jpa.repository.Query("SELECT COALESCE(SUM(s.amount), 0) FROM Application a JOIN a.scholarship s WHERE a.status = com.scholarly.application.model.ApplicationStatus.APPROVED")
     java.math.BigDecimal sumAllocatedFunds();
+
+    long countByStatus(com.scholarly.application.model.ApplicationStatus status);
 }

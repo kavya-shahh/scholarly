@@ -8,7 +8,7 @@ const StudentDashboard = () => {
     const [applications, setApplications] = useState([]);
     const [activeTab, setActiveTab] = useState('scholarships');
     const [loading, setLoading] = useState(true);
-    
+
     // Modal & Apply State
     const [showApplyModal, setShowApplyModal] = useState(false);
     const [selectedScholarship, setSelectedScholarship] = useState(null);
@@ -141,7 +141,7 @@ const StudentDashboard = () => {
             {/* Header Component */}
             <header className={styles.header}>
                 <div className={styles.headerBrand}>
-                    <img src="/y6lk001.svg" alt="Scholarly Logo" className={styles.logo} />
+
                     <h1 className={styles.title}>Scholarly</h1>
                 </div>
                 <div className={styles.profileSection}>
@@ -156,13 +156,13 @@ const StudentDashboard = () => {
             {/* Sub-Panel Content Layout */}
             <main className={styles.mainContent}>
                 <div className={styles.tabsSection}>
-                    <button 
+                    <button
                         className={`${styles.tabBtn} ${activeTab === 'scholarships' ? styles.activeTab : ''}`}
                         onClick={() => setActiveTab('scholarships')}
                     >
                         Browse Scholarships
                     </button>
-                    <button 
+                    <button
                         className={`${styles.tabBtn} ${activeTab === 'applications' ? styles.activeTab : ''}`}
                         onClick={() => setActiveTab('applications')}
                     >
@@ -211,7 +211,7 @@ const StudentDashboard = () => {
                                                         <span className={styles.amountBadge}>₹{s.amount.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
                                                     </div>
                                                     <p className={styles.cardDesc}>{s.description}</p>
-                                                    
+
                                                     <div className={styles.cardMeta}>
                                                         <div>
                                                             <strong>Deadline:</strong> {new Date(s.deadline).toLocaleDateString('en-GB')}
@@ -257,7 +257,7 @@ const StudentDashboard = () => {
                                                     {formatStatusText(app.status)}
                                                 </span>
                                             </div>
-                                            
+
                                             <div className={styles.appMeta}>
                                                 <div><strong>Applied On:</strong> {new Date(app.appliedAt).toLocaleDateString('en-GB')}</div>
                                                 <div><strong>GPA Submitted:</strong> {app.gpaEntered}</div>
@@ -321,17 +321,17 @@ const StudentDashboard = () => {
                             </div>
 
                             <div className={styles.modalActions}>
-                                <button 
-                                    type="button" 
-                                    onClick={() => setShowApplyModal(false)} 
+                                <button
+                                    type="button"
+                                    onClick={() => setShowApplyModal(false)}
                                     className={styles.cancelBtn}
                                     disabled={submitting}
                                 >
                                     Cancel
                                 </button>
-                                <button 
-                                    type="submit" 
-                                    className={styles.submitBtn} 
+                                <button
+                                    type="submit"
+                                    className={styles.submitBtn}
                                     disabled={submitting}
                                 >
                                     {submitting ? 'Submitting...' : 'Submit Application'}

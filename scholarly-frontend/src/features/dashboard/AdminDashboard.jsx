@@ -8,7 +8,8 @@ export default function AdminDashboard() {
         totalStudents: 0,
         totalScholarships: 0,
         totalApplications: 0,
-        totalAllocatedFunds: 0
+        pendingApprovals: 0,
+        approvedScholarships: 0
     });
     const [scholarships, setScholarships] = useState([]);
     const [loadingStats, setLoadingStats] = useState(true);
@@ -122,7 +123,7 @@ export default function AdminDashboard() {
         <div className={styles.dashboardContainer}>
             <header className={styles.header}>
                 <div className={styles.headerBrand}>
-                    <span className={styles.logoBadge}>S</span>
+
                     <h1 className={styles.title}>scholarly <span className={styles.roleLabel}>Admin Portal</span></h1>
                 </div>
                 <div className={styles.profileSection}>
@@ -135,8 +136,15 @@ export default function AdminDashboard() {
             </header>
 
             <main className={styles.mainContent}>
-                {/* 4-Card System Analytics metrics block */}
+                {/* 5-Card System Analytics metrics block */}
                 <div className={styles.statsGrid}>
+                    <div className={styles.statsCard}>
+                        <div className={styles.statsTitle}>No. of Scholarships Offered</div>
+                        <div className={styles.statsVal}>
+                            {loadingStats ? <span className={styles.loader}></span> : stats.totalScholarships}
+                        </div>
+
+                    </div>
                     <div className={styles.statsCard}>
                         <div className={styles.statsTitle}>Students Registered</div>
                         <div className={styles.statsVal}>
@@ -144,31 +152,28 @@ export default function AdminDashboard() {
                         </div>
                     </div>
                     <div className={styles.statsCard}>
-                        <div className={styles.statsTitle}>Scholarships Offered</div>
-                        <div className={styles.statsVal}>
-                            {loadingStats ? <span className={styles.loader}></span> : stats.totalScholarships}
-                        </div>
-                    </div>
-                    <div className={styles.statsCard}>
-                        <div className={styles.statsTitle}>Applications Submitted</div>
+                        <div className={styles.statsTitle}>Applied for Scholarship</div>
                         <div className={styles.statsVal}>
                             {loadingStats ? <span className={styles.loader}></span> : stats.totalApplications}
                         </div>
+
                     </div>
                     <div className={styles.statsCard}>
-                        <div className={styles.statsTitle}>Allocated Funding</div>
-                        <div className={`${styles.statsVal} ${styles.allocatedText}`}>
-                            {loadingStats ? (
-                                <span className={styles.loader}></span>
-                            ) : (
-                                `₹${stats.totalAllocatedFunds.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`
-                            )}
+                        <div className={styles.statsTitle}>Pending Approvals</div>
+                        <div className={styles.statsVal}>
+                            {loadingStats ? <span className={styles.loader}></span> : stats.pendingApprovals}
+                        </div>
+                    </div>
+                    <div className={styles.statsCard}>
+                        <div className={styles.statsTitle}>Approved Scholarships</div>
+                        <div className={styles.statsVal}>
+                            {loadingStats ? <span className={styles.loader}></span> : stats.approvedScholarships}
                         </div>
                     </div>
                 </div>
-
+                {/* Left Column: Add Scholarships  */}
                 <div className={styles.contentLayout}>
-                    {/* Left Column: Create new Scholarship */}
+
                     <div className={styles.formContainer}>
                         <h2 className={styles.sectionTitle}>Deploy New Scholarship</h2>
 

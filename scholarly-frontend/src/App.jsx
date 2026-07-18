@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -48,9 +48,93 @@ const HomeRedirect = () => {
   return <Navigate to="/login" replace />;
 };
 
+const NetworkErrorBanner = () => {
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  useEffect(() => {
+    const handleNetworkError = (e) => {
+      setErrorMessage(e.detail.message);
+    };
+    const handleNetworkSuccess = () => {
+      setErrorMessage(null);
+    };
+
+    window.addEventListener('network-error', handleNetworkError);
+    window.addEventListener('network-success', handleNetworkSuccess);
+
+    return () => {
+      window.removeEventListener('network-error', handleNetworkError);
+      window.removeEventListener('network-success', handleNetworkSuccess);
+    };
+  }, []);
+
+  if (!errorMessage) return null;
+
+  return (
+    <div style={bannerStyles.banner}>
+      <div style={bannerStyles.content}>
+        <span style={bannerStyles.icon}>⚠️</span>
+        <span style={bannerStyles.text}>{errorMessage}</span>
+      </div>
+      <button onClick={() => setErrorMessage(null)} style={bannerStyles.closeBtn}>×</button>
+    </div>
+  );
+};
+
+const bannerStyles = {
+  banner: {
+    position: 'fixed',
+    top: '24px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    zIndex: 99999,
+    backgroundColor: '#da3737',
+    color: '#fff',
+    padding: '14px 28px',
+    borderRadius: '8px',
+    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: '24px',
+    minWidth: '350px',
+    maxWidth: '90%',
+    fontFamily: "'Inter', system-ui, sans-serif",
+    border: '1px solid #ff5a5a'
+  },
+  content: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px'
+  },
+  icon: {
+    fontSize: '18px',
+    display: 'flex',
+    alignItems: 'center'
+  },
+  text: {
+    fontSize: '14px',
+    fontWeight: '600',
+    lineHeight: '1.4',
+    textAlign: 'left'
+  },
+  closeBtn: {
+    background: 'none',
+    border: 'none',
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontSize: '22px',
+    cursor: 'pointer',
+    padding: '0 4px',
+    display: 'flex',
+    alignItems: 'center',
+    fontWeight: '300'
+  }
+};
+
 function App() {
   return (
     <AuthProvider>
+      <NetworkErrorBanner />
       <Router>
         <Routes>
           {/* Public Authentication Views */}

@@ -13,9 +13,9 @@ spring:
       max-request-size: 5MB
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/scholarly
-    username: postgres
-    password: secret
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/scholarly}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:secret}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -44,6 +44,6 @@ logging:
 security:
   jwt:
     # Symmetric encryption key (at least 256 bits for HMAC-SHA256)
-    secret: 9a4f2c8d3b7a1e5f8g9h0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z7a8b9c0d1e2f3g4h5
+    secret: ${JWT_SECRET:9a4f2c8d3b7a1e5f8g9h0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z7a8b9c0d1e2f3g4h5}
     expiration-ms: 86400000 # 24 hours
 

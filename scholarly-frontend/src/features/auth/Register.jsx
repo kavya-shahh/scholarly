@@ -9,12 +9,12 @@ const Register = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [role, setRole] = useState('STUDENT');
-    
+
     // Student specific fields
     const [gpa, setGpa] = useState('');
     const [department, setDepartment] = useState('');
     const [enrollmentNumber, setEnrollmentNumber] = useState('');
-    
+
     const [formError, setFormError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [submitting, setSubmitting] = useState(false);
@@ -68,7 +68,7 @@ const Register = () => {
                             <input
                                 type="text"
                                 className={styles.input}
-                                placeholder="Pinky"
+                                placeholder="Name"
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
                                 required
@@ -79,7 +79,7 @@ const Register = () => {
                             <input
                                 type="text"
                                 className={styles.input}
-                                placeholder="Shah"
+                                placeholder="Surname"
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
                                 required
@@ -132,7 +132,7 @@ const Register = () => {
                                 <input
                                     type="text"
                                     className={styles.input}
-                                    placeholder="e.g. CS2026001"
+                                    placeholder="e.g. ET24BTCO001"
                                     value={enrollmentNumber}
                                     onChange={(e) => setEnrollmentNumber(e.target.value)}
                                     required={role === 'STUDENT'}
@@ -141,14 +141,14 @@ const Register = () => {
 
                             <div className={styles.studentGrid}>
                                 <div className={styles.formGroup}>
-                                    <label className={styles.label}>Current GPA</label>
+                                    <label className={styles.label}>Current CGPA</label>
                                     <input
                                         type="number"
                                         step="0.01"
                                         min="0.00"
                                         max="10.00"
                                         className={styles.input}
-                                        placeholder="GPA (out of 10.0)"
+                                        placeholder="CGPA(out of 10.0)"
                                         value={gpa}
                                         onChange={(e) => setGpa(e.target.value)}
                                         required={role === 'STUDENT'}

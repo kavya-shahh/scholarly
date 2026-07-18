@@ -45,3 +45,4 @@ scholarly-frontend/pnpm-debug.log*
 postgres-data/
 data/
 uploads/
+*.pdf

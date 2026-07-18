@@ -75,11 +75,11 @@ public class AuthService {
     public AuthResult login(LoginRequest request) {
         // 1. Find user by email
         User user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
+                .orElseThrow(() -> new IllegalArgumentException("Pls first register yourself then log in"));
 
         // 2. Validate password match
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
-            throw new BadCredentialsException("Invalid email or password");
+            throw new IllegalArgumentException("Invalid email/password");
         }
 
         // 3. Generate JWT token
@@ -96,17 +96,10 @@ public class AuthService {
     }
 
     private void validateStudentDetails(RegisterRequest request) {
-        if (request.gpa() == null) {
-            throw new IllegalArgumentException("GPA is required for students");
-        }
-        if (request.department() == null || request.department().isBlank()) {
-            throw new IllegalArgumentException("Department is required for students");
-        }
-        if (request.enrollmentNumber() == null || request.enrollmentNumber().isBlank()) {
-            throw new IllegalArgumentException("Enrollment number is required for students");
-        }
-        if (studentProfileRepository.existsByEnrollmentNumber(request.enrollmentNumber())) {
-            throw new IllegalArgumentException("Enrollment number is already registered");
+        if (request.enrollmentNumber() != null && !request.enrollmentNumber().isBlank()) {
+            if (studentProfileRepository.existsByEnrollmentNumber(request.enrollmentNumber())) {
+                throw new IllegalArgumentException("Enrollment number is already registered");
+            }
         }
     }
 
